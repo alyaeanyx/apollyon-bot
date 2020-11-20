@@ -5,8 +5,11 @@ import feeds
 
 config = yaml.safe_load(open("config.yaml"))
 p = config["command_prefix"]
-feed_channels = yaml.safe_load(open("channels.yaml"))
-print(feed_channels)
+try:
+    feed_channels = yaml.safe_load(open("channels.yaml"))
+    print(feed_channels)
+except FileNotFoundError:
+    feed_channels = []
 
 client = discord.Client()
 

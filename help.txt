@@ -1,0 +1,8 @@
+*Available commands*:
+**{}help:** display this message
+**{}list:** list all available feeds
+**{}add:** subscribe this channel to a specific feed
+**{}remove:** unsubscribe this channel from a specific feed
+**{}clear:** unsubscribe this channel from all feeds
+
+To contribute or report a bug, DM <@558042438984531968>.

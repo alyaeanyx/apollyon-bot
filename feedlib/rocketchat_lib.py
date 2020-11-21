@@ -44,7 +44,7 @@ class RocketchatYoutubeFeed(Feed):
         updates = []
         for link in self.check_for_links():
             if not self.already_sent(link):
-                updates.append(self.text % link)
+                updates.append(self.text.format(link=link))
                 self.register_as_sent(link)
         return updates
 

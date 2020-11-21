@@ -1,4 +1,5 @@
 command_prefix: "-"
+maintainer: "MAINTAINER_DISCORD_USER_ID"
 discord_token: TOKEN
 rocketchat_user: USER
 rocketchat_password: PASSWD

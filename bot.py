@@ -32,7 +32,7 @@ async def on_message(message):
             return
 
         if command[0] == "help":
-            await message.channel.send(open("help.txt").read().replace("{}", p),
+            await message.channel.send(open("help.txt").read().replace("{p}", p).replace("{d}", config["maintainer"]),
                                        allowed_mentions=discord.AllowedMentions.none())
         elif command[0] == "list":
             msg = "*Available feeds:*\n"

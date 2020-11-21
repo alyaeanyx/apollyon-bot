@@ -48,7 +48,7 @@ async def on_message(message):
                 updates = feed.get_updates()
                 await message.channel.send(f"Channel {feed.name} synced, {len(updates)} update(s) skipped")
             await message.channel.send("Done!")
-        
+
         elif command[0] == "list":
             msg = "*Available feeds:*\n"
             for feed in feeds.FEEDS:

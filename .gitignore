@@ -1,1 +1,3 @@
 ./config.yaml
+./channels.yaml
+./data/sent/*

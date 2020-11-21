@@ -32,8 +32,22 @@ async def on_message(message):
             return
 
         if command[0] == "help":
-            await message.channel.send(open("help.txt").read().replace("{p}", p).replace("{d}", config["maintainer"]),
+            await message.channel.send(open("help.txt").read().format(p=p, d=config["maintainer"]),
                                        allowed_mentions=discord.AllowedMentions.none())
+
+        elif command[0] == "sync" and message.author.id == config["maintainer"]:
+            if not feeds.feed_exists(command[1]):
+                await message.channel.send(f"Feed doesn't exist")
+            feed = feeds.get_feed(command[1])
+            updates = feed.get_updates()
+            await message.channel.send(f"Feed synced, {len(updates)} update(s) skipped")
+
+        elif command[0] == "syncall" and message.author.id == config["maintainer"]:
+            await message.channel.send("Syncing channels...")
+            for feed in feeds.FEEDS:
+                updates = feed.get_updates()
+                await message.channel.send(f"Channel {feed.name} synced, {len(updates)} update(s) skipped")
+
         elif command[0] == "list":
             msg = "*Available feeds:*\n"
             for feed in feeds.FEEDS:

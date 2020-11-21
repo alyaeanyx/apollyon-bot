@@ -1,8 +1,8 @@
 *Available commands*:
 **{p}help:** display this message
 **{p}list:** list all available feeds
-**{p}add:** subscribe this channel to a specific feed
-**{p}remove:** unsubscribe this channel from a specific feed
+**{p}add <feed>:** subscribe this channel to a specific feed
+**{p}remove <feed>:** unsubscribe this channel from a specific feed
 **{p}clear:** unsubscribe this channel from all feeds
 
 To contribute or report a bug, visit https://github.com/alyaeanyx/apollyon-bot or DM <@{d}>.

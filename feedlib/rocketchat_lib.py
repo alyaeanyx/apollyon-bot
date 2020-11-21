@@ -21,13 +21,14 @@ class RocketchatYoutubeFeed(Feed):
 
     def check_for_links(self):
         api = RocketChatAPI(settings={
-            "username": config["rocketchat_username"], "password": config["rocketchat_password"],
+            "username": config["rocketchat_user"], "password": config["rocketchat_password"],
             "domain": self.rocketchat_url
         })
 
         links = []
-        oldest = (datetime.datetime.now()-datetime.timedelta(seconds=86400)).isoformat()
-        for msg in api.get_private_room_history(self.rocketchat_room, oldest=oldest)["messages"]:
+        oldest = (datetime.datetime.now()-datetime.timedelta(seconds=86400*10)).isoformat()
+        res = api.get_private_room_history(self.rocketchat_room, oldest=oldest)
+        for msg in res["messages"]:
             match = re.search("https\:\/\/(www\.)?youtu(be\.(com|de)|\.be)\/(watch\?v\=)?([0-9A-Za-z\-_]+)", msg["msg"])
             if match:
                 yt_id = match[5]

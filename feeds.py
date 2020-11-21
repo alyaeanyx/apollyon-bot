@@ -1,6 +1,7 @@
 import datetime
 import feedlib
 import feedlib.scheduling
+import feedlib.rocketchat_lib
 
 
 def get_feed(name):
@@ -19,8 +20,15 @@ def feed_exists(name):
 
 FEEDS = [
     feedlib.scheduling.ScheduledFeed(
-        "PTP1_lectures", "Vorlesungen Theoretische Physik 1", "data/ptp_links.csv",
+        "PTP1_lectures", "Vorlesungen Theoretische Physik 1 (vorab verteile Linkliste)", "data/ptp_links.csv",
         """Vorlesung Nr. %d:\n%s"""
+    ),
+
+    feedlib.rocketchat_lib.RocketchatYoutubeFeed(
+        "PEP1_lectures", "Vorlesungen Experimentalphysik 1 (Links aus RocketChat)",
+        "Auf RocketChat wurde soeben ein neuer Link für PEP1 hochgeladen:\n%s",
+        "https://uebungen.physik.uni-heidelberg.de/chat", "Z8dkiYCN7ky6fxqfM",
+        "UCW5F1NI96JIaLbYT6f7BpdQ"
     ),
 
     feedlib.scheduling.RepeatedFeed(

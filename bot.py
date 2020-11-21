@@ -23,7 +23,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith(p):
+    if message.content.startswith(p) and message.author != client.user:
         channels_updated = False
         command = message.content[len(p):].split(" ")
 

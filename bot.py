@@ -117,7 +117,7 @@ async def background_task(c):
                 for update in updates:
                     await channel.send(update)
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(config["fetching_interval"])
 
 
 client.loop.create_task(background_task(client))

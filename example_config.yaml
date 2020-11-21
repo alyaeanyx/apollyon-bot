@@ -1,6 +1,8 @@
 command_prefix: "-"
 maintainer: MAINTAINER_DISCORD_USER_ID
 discord_token: TOKEN
+
+fetching_interval: 30
 rocketchat_user: USER
 rocketchat_password: PASSWD
 youtube_api_key: API_KEY

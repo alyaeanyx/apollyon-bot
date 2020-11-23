@@ -9,3 +9,5 @@ rocketchat_password: PASSWD
 youtube_api_key: API_KEY
 mampf_email: EMAIL
 mampf_password: PASSWD
+phug_user: USER
+phug_password: PASSWD

@@ -6,7 +6,6 @@ import yaml
 from rocketchat.api import RocketChatAPI
 from feedlib import Feed
 
-# room: "Z8dkiYCN7ky6fxqfM"
 
 config = yaml.safe_load(open("config.yaml"))
 

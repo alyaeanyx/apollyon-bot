@@ -3,6 +3,7 @@ import feedlib
 import feedlib.scheduling
 import feedlib.rocketchat_lib
 import feedlib.mampf
+import feedlib.ph_uebungsgruppen
 
 
 def get_feed(name):
@@ -60,6 +61,10 @@ FEEDS = [
         "Auf MaMpf wurde soeben eine neue Datei für LA1 hochgeladen: **{title}**\nLink: {url}",
         58, "nuesse"
     ),
+
+    feedlib.ph_uebungsgruppen.PHUebungsgruppenFeed("PTP1_worksheets", "Übungsblätter für Theoretische Physik 1",
+                                                   "Im Übungsgruppenverwaltungssystem wurde soeben das Übungsblatt **{name}** hochgeladen:\n{link}",
+                                                   1207),
 
     feedlib.DeveloperFeed("DevLog", "Developer message log")
 

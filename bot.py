@@ -166,9 +166,11 @@ async def background_task():
 
             for ch in f["channels"]:
                 channel = client.get_channel(ch["id"])
+                mentioned = False
                 for update in updates:
-                    if ch["mention"] != "":
+                    if ch["mention"] != "" and not mentioned:
                         await channel.send(ch["mention"] + " " + update)
+                        mentioned = True
                     else:
                         await channel.send(update)
                     await asyncio.sleep(0.5)

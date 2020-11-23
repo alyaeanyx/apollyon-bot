@@ -2,6 +2,7 @@ import asyncio
 import discord
 import yaml
 import feeds
+import traceback
 
 config = yaml.safe_load(open("config.yaml"))
 p = config["command_prefix"]
@@ -13,16 +14,20 @@ except FileNotFoundError:
 
 client = discord.Client()
 
+ready = False
 
 @client.event
 async def on_ready():
+    global ready
     for guild in client.guilds:
         print(f"Found guild: {guild.name}")
     print("Ready")
+    ready = True
 
 
 @client.event
 async def on_message(message):
+    print(message.content)
     if message.content.startswith(p) and message.author != client.user:
         channels_updated = False
         command = message.content[len(p):].split(" ")
@@ -52,7 +57,8 @@ async def on_message(message):
         elif command[0] == "list":
             msg = "*Available feeds:*\n"
             for feed in feeds.FEEDS:
-                msg += f"**{feed.name}:** {feed.description}\n"
+                if feed.public:
+                    msg += f"**{feed.name}:** {feed.description}\n"
             await message.channel.send(msg)
 
         elif command[0] == "add" or command[0] == "remove":
@@ -107,19 +113,28 @@ async def on_message(message):
             chfile.close()
 
 
-async def background_task(c):
-    await c.wait_until_ready()
+async def background_task():
+    await client.wait_until_ready()
+    while not ready:
+        await asyncio.sleep(0.1)
+    await asyncio.sleep(2)
+
     while True:
         for f in feed_channels:
             feed = feeds.get_feed(f["feed_name"])
-            updates = feed.get_updates()
+            try:
+                updates = feed.get_updates()
+            except:
+                traceback.print_exc()
+                feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**")
+
             for channel_id in f["channels"]:
-                channel = c.get_channel(channel_id)
+                channel = client.get_channel(channel_id)
                 for update in updates:
                     await channel.send(update)
 
         await asyncio.sleep(config["fetching_interval"])
 
 
-client.loop.create_task(background_task(client))
+client.loop.create_task(background_task())
 client.run(config["discord_token"])

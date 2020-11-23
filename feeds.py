@@ -59,7 +59,9 @@ FEEDS = [
         "LA1_worksheets", "Übungsblätter für Lineare Algebra 1 (MaMpf)",
         "Auf MaMpf wurde soeben eine neue Datei für LA1 hochgeladen: **{title}**\nLink: {url}",
         58, "nuesse"
-    )
+    ),
+
+    feedlib.DeveloperFeed("DevLog", "Developer message log")
 
     #feedlib.Feed("Ana1_lectures", "Vorlesungen Analysis 1"),
     #feedlib.Feed("LA1_lectures", "Vorlesungen Lineare Algebra 1")

@@ -5,6 +5,7 @@ class Feed:
     def __init__(self, name, description):
         self.name = name
         self.description = description
+        self.public = True
 
     def get_updates(self):
         return []
@@ -27,3 +28,17 @@ class Feed:
         except (FileNotFoundError, EOFError) as e:
             return False
 
+
+class DeveloperFeed(Feed):
+    def __init__(self, name, description):
+        Feed.__init__(self, name, description)
+        self.public = False
+        self.updates = []
+
+    def add_update(self, update):
+        self.updates.append(update)
+
+    def get_updates(self):
+        updates = self.updates[:]
+        self.updates = []
+        return updates

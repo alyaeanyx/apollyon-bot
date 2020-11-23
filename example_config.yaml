@@ -3,6 +3,7 @@ maintainer: MAINTAINER_DISCORD_USER_ID
 discord_token: TOKEN
 
 fetching_interval: 30
+error_timeout: 600
 
 rocketchat_user: USER
 rocketchat_password: PASSWD

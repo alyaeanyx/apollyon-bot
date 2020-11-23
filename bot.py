@@ -3,6 +3,7 @@ import discord
 import yaml
 import feeds
 import traceback
+import time
 
 config = yaml.safe_load(open("config.yaml"))
 p = config["command_prefix"]
@@ -141,6 +142,9 @@ async def on_message(message):
             chfile.close()
 
 
+
+last_error = {}
+
 async def background_task():
     await client.wait_until_ready()
     while not ready:
@@ -153,6 +157,10 @@ async def background_task():
             try:
                 updates = feed.get_updates()
             except:
+                if feed.name in last_error:
+                    if time.time() < last_error[feed.name] + config["error_timeout"]:
+                        continue
+                last_error[feed.name] = time.time()
                 traceback.print_exc()
                 feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**")
 

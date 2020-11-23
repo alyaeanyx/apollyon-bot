@@ -4,5 +4,6 @@
 **{p}add <feed>:** subscribe this channel to a specific feed
 **{p}remove <feed>:** unsubscribe this channel from a specific feed
 **{p}clear:** unsubscribe this channel from all feeds
+**{p}mention <feed> (none|@everyone|@here|@<role/user>):** set which role should be mentioned in case of an update
 
 To contribute or report a bug, visit https://github.com/alyaeanyx/apollyon-bot or DM <@{d}>.

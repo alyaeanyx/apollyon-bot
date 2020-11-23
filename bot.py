@@ -27,7 +27,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    print(message.content)
     if message.content.startswith(p) and message.author != client.user:
         channels_updated = False
         command = message.content[len(p):].split(" ")
@@ -61,9 +60,9 @@ async def on_message(message):
                     msg += f"**{feed.name}:** {feed.description}\n"
             await message.channel.send(msg)
 
-        elif command[0] == "add" or command[0] == "remove":
+        elif command[0] == "add" or command[0] == "remove" or command[0] == "mention":
             if len(command) <= 1:
-                await message.channel.send(f"You need to provide a feed to this command, for instance {p}add Ana1")
+                await message.channel.send(f"You need to provide a feed to this command as an argument.")
                 return
             feed_name = command[1]
             if not feeds.feed_exists(feed_name):
@@ -73,35 +72,64 @@ async def on_message(message):
             if command[0] == "add":
                 for f in feed_channels:
                     if f["feed_name"] == feed_name:
-                        if message.channel.id in f["channels"]:
+                        if message.channel.id in [ch["id"] for ch in f["channels"]]:
                             await message.channel.send(f"This channel already is subscribed to **{feed_name}**.")
                             return
-                        f["channels"].append(message.channel.id)
+                        f["channels"].append({"id": message.channel.id, "mention": ""})
                         break
                 else:
-                    feed_channels.append({"feed_name": feed_name, "channels": [message.channel.id]})
+                    feed_channels.append({"feed_name": feed_name,
+                                          "channels": [{"id": message.channel.id, "mention": ""}]
+                                          })
                 channels_updated = True
                 await message.channel.send(f"Successfully subscribed #{message.channel.name} to feed **{feed_name}**.")
+
             elif command[0] == "remove":
                 for f in feed_channels:
                     if f["feed_name"] == feed_name:
-                        try:
-                            f["channels"].remove(message.channel.id)
-                            if len(f["channels"]) == 0:
-                                feed_channels.remove(f)
-                            await message.channel.send(f"Successfully unsubscribed #{message.channel.name} from feed **{feed_name}**.")
-                            channels_updated = True
-                        except ValueError:
+                        for ch in f["channels"]:
+                            if ch["id"] == message.channel.id:
+                                f["channels"].remove(ch)
+                                if len(f["channels"]) == 0:
+                                    feed_channels.remove(f)
+                                await message.channel.send(f"Successfully unsubscribed #{message.channel.name} from feed **{feed_name}**.")
+                                channels_updated = True
+                                break
+                        else:
                             await message.channel.send(f"This channel isn't subscribed to **{feed_name}**.")
                         break
                 else:
                     await message.channel.send(f"This channel isn't subscribed to **{feed_name}**.")
 
+            elif command[0] == "mention":
+                if len(command) <= 2:
+                    await message.channel.send("You need to provide a valid mention string to this command (@<role/user>)")
+                    return
+                for f in feed_channels:
+                    if f["feed_name"] == feed_name:
+                        for ch in f["channels"]:
+                            if ch["id"] == message.channel.id:
+                                if command[2] == "none":
+                                    ch["mention"] = ""
+                                else:
+                                    ch["mention"] = command[2]
+                                await message.channel.send(f"Updated mention settings for feed **{feed_name}** in #{message.channel.name}.")
+                                channels_updated = True
+                                break
+                        else:
+                            await message.channel.send(f"This channel isn't subscribed to **{feed_name}** yet. Use \"{p}add {feed_name}\" to do so.")
+                            return
+                        break
+                else:
+                    await message.channel.send(f"This channel isn't subscribed to **{feed_name}** yet. Use \"{p}add {feed_name}\" to do so.")
+                    return
+
         elif command[0] == "clear":
             for f in feed_channels:
-                if message.channel.id in f["channels"]:
-                    f["channels"].remove(message.channel.id)
-                    channels_updated = True
+                for ch in f["channels"]:
+                    if ch["id"] == message.channel.id:
+                        f["channels"].remove(ch)
+                        channels_updated = True
             await message.channel.send(f"Cleared channel #{message.channel.name}.")
 
         else:
@@ -128,10 +156,13 @@ async def background_task():
                 traceback.print_exc()
                 feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**")
 
-            for channel_id in f["channels"]:
-                channel = client.get_channel(channel_id)
+            for ch in f["channels"]:
+                channel = client.get_channel(ch["id"])
                 for update in updates:
-                    await channel.send(update)
+                    if ch["mention"] != "":
+                        await channel.send(ch["mention"] + " " + update)
+                    else:
+                        await channel.send(update)
 
         await asyncio.sleep(config["fetching_interval"])
 

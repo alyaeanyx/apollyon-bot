@@ -47,7 +47,13 @@ FEEDS = [
 
     feedlib.scheduling.RepeatedFeed(
         "WPAstro1_lectures_reminder", "Erinnerungen an Astronomie-1-Vorlesung",
-        "Erinnerung an die Astronomie-Vorlesung um 14:15!", datetime.time(21, 19, 00)
+        "Erinnerung an die Astronomie-Vorlesung um 14:15!", datetime.time(14, 00, 00)
+    ),
+
+    feedlib.ph_uebungsgruppen.PHUebungsgruppenFeed(
+        "PTP1_worksheets", "Übungsblätter für Theoretische Physik 1",
+        "Im Übungsgruppenverwaltungssystem wurde soeben das Übungsblatt **{name}** hochgeladen:\n{link}",
+        1207
     ),
 
     feedlib.mampf.MampfFeed(
@@ -61,10 +67,6 @@ FEEDS = [
         "Auf MaMpf wurde soeben eine neue Datei für LA1 hochgeladen: **{title}**\nLink: {url}",
         58, "nuesse"
     ),
-
-    feedlib.ph_uebungsgruppen.PHUebungsgruppenFeed("PTP1_worksheets", "Übungsblätter für Theoretische Physik 1",
-                                                   "Im Übungsgruppenverwaltungssystem wurde soeben das Übungsblatt **{name}** hochgeladen:\n{link}",
-                                                   1207),
 
     feedlib.DeveloperFeed("DevLog", "Developer message log")
 

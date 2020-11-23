@@ -75,6 +75,12 @@ FEEDS = [
         58, "nuesse"
     ),
 
+    feedlib.moodle.MoodleTypeBFeed(
+        "WPAstro1_worksheets", "Übungsblätter für Astronomie I (Moodle)",
+        "Auf Moodle wurde soeben ein neues Dokument für WPAstro1 hochgeladen: **{name}**\nLink: {link}",
+        3759
+    ),
+
     feedlib.DeveloperFeed("DevLog", "Developer message log")
 
     #feedlib.Feed("Ana1_lectures", "Vorlesungen Analysis 1"),

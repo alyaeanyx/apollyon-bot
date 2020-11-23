@@ -40,6 +40,18 @@ class MoodleFeed(Feed):
         self.text = text
         self.course_id = course_id
 
+    def request_ensure_login(self, url):
+        res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+        if res.status_code != 200:
+            if res.status_code == 303:
+                self.session_id = login()
+                res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+                if res.status_code != 200:
+                    raise RuntimeError("Moodle login failed")
+            else:
+                raise RuntimeError("Failed to access Moodle")
+        return res
+
     def get_updates(self):
         updates = []
         for name, link in self.fetch_worksheets():
@@ -58,16 +70,7 @@ class MoodleTypeAFeed(MoodleFeed):
 
     def fetch_worksheets(self):
         url = f"https://moodle.uni-heidelberg.de/course/view.php?id={self.course_id}"
-        res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
-        if res.status_code != 200:
-            if res.status_code == 303:
-                self.session_id = login()
-                res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
-                if res.status_code != 200:
-                    raise RuntimeError("Moodle login failed")
-            else:
-                raise RuntimeError("Failed to access Moodle")
-
+        res = self.request_ensure_login(url)
         doc = BeautifulSoup(res.text, "html.parser")
         links = []
         for a in doc.find_all("a", attrs={"class": "aalink"}):
@@ -75,3 +78,27 @@ class MoodleTypeAFeed(MoodleFeed):
             if match:
                 links.append((match[1], a["href"]))
         return links
+
+
+class MoodleTypeBFeed(MoodleFeed):
+    """
+    Tested for course Astro I
+    Seriously, it seems like we'll need one class for every single course.
+    May the days of the person who devised this website be short and let another take their office.
+    May they be cast into the bowels of the earth and suffer eternal torture for their crimes.
+    May they realize what they did by themself.
+    """
+    def __init__(self, name, description, text, course_id):
+        MoodleFeed.__init__(self, name, description, text, course_id)
+
+    def fetch_worksheets(self):
+        url = f"https://moodle.uni-heidelberg.de/course/view.php?id={self.course_id}"
+        res = self.request_ensure_login(url)
+        doc = BeautifulSoup(res.text, "html.parser")
+
+        links = []
+        for a in doc.find_all("a", attrs={"class": "aalink"}):
+            if a["href"].startswith("https://moodle.uni-heidelberg.de/mod/assign/"):
+                links.append((a.text.rstrip(" Aufgabe"), a["href"]))
+        return links
+

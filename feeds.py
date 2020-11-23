@@ -4,6 +4,7 @@ import feedlib.scheduling
 import feedlib.rocketchat_lib
 import feedlib.mampf
 import feedlib.ph_uebungsgruppen
+import feedlib.moodle
 
 
 def get_feed(name):
@@ -51,9 +52,15 @@ FEEDS = [
     ),
 
     feedlib.ph_uebungsgruppen.PHUebungsgruppenFeed(
-        "PTP1_worksheets", "Übungsblätter für Theoretische Physik 1",
+        "PTP1_worksheets", "Übungsblätter für Theoretische Physik 1 (Übungsgruppenverwaltungssystem)",
         "Im Übungsgruppenverwaltungssystem wurde soeben das Übungsblatt **{name}** hochgeladen:\n{link}",
         1207
+    ),
+
+    feedlib.moodle.MoodleTypeAFeed(
+        "PEP1_worksheets", "Übungsblätter für Experimentalphysik 1 (Moodle)",
+        "Im Moodle wurde soeben das Übungsblatt **{name}** hochgeladen:\n{link}",
+        4274
     ),
 
     feedlib.mampf.MampfFeed(

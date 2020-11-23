@@ -11,3 +11,5 @@ mampf_email: EMAIL
 mampf_password: PASSWD
 phug_user: USER
 phug_password: PASSWD
+moodle_user: USER
+moodle_password: PASSWD

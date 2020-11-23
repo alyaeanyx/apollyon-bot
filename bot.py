@@ -163,6 +163,7 @@ async def background_task():
                         await channel.send(ch["mention"] + " " + update)
                     else:
                         await channel.send(update)
+                    await asyncio.sleep(0.5)
 
         await asyncio.sleep(config["fetching_interval"])
 

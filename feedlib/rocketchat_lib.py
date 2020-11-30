@@ -27,7 +27,7 @@ class RocketchatYoutubeFeed(Feed):
         links = []
         oldest = (datetime.datetime.now()-datetime.timedelta(seconds=86400*10)).isoformat()
         res = api.get_private_room_history(self.rocketchat_room, oldest=oldest)
-        for msg in res["messages"]:
+        for msg in res["messages"][::-1]:
             match = re.search("https:\/\/(www\.)?youtu(be\.(com|de)|\.be)\/(watch\?v\=)?([0-9A-Za-z\-_]+)", msg["msg"])
             if match:
                 yt_id = match[5]

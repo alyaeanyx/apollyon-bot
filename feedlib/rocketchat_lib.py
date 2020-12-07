@@ -36,14 +36,14 @@ class RocketchatYoutubeFeed(Feed):
                                     "id": yt_id})
                 data = json.loads(res.text)
                 if data["items"][0]["snippet"]["channelId"] == self.youtube_channel:
-                    links.append(match[0])
+                    links.append(match[5])
         return links
 
     def get_updates(self):
         updates = []
         for link in self.check_for_links():
             if not self.already_sent(link):
-                updates.append(self.text.format(link=link))
+                updates.append(self.text.format(link="https://youtu.be/"+link))
                 self.register_as_sent(link)
         return updates
 

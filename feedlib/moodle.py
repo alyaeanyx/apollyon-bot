@@ -43,13 +43,13 @@ class MoodleFeed(Feed):
     def request_ensure_login(self, url):
         res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
         if res.status_code != 200:
-            if res.status_code == 303:
-                self.session_id = login()
-                res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
-                if res.status_code != 200:
-                    raise RuntimeError("Moodle login failed")
-            else:
-                raise RuntimeError("Failed to access Moodle")
+            #if res.status_code == 303:
+            self.session_id = login()
+            res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+            if res.status_code != 200:
+                raise RuntimeError("Moodle login failed")
+            #else:
+            #    raise RuntimeError("Failed to access Moodle")
         return res
 
     def get_updates(self):

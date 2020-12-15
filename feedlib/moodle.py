@@ -41,7 +41,12 @@ class MoodleFeed(Feed):
         self.course_id = course_id
 
     def request_ensure_login(self, url):
-        res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+        try:
+            res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+        except requests.exceptions.ConnectionError:
+            self.session_id = login()
+            res = requests.get(url, cookies={"MoodleSession": self.session_id}, allow_redirects=False)
+
         if res.status_code != 200:
             #if res.status_code == 303:
             self.session_id = login()

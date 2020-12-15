@@ -43,7 +43,7 @@ class MampfFeed(Feed):
         cards = doc.find_all(id="media-card-subheader")
 
         titles = []
-        for card in cards:
+        for card in cards[::-1]:
             titles.append(card.find("h5").text.strip())
 
         updates = []

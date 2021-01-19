@@ -76,6 +76,8 @@ class MoodleTypeAFeed(MoodleFeed):
     def fetch_worksheets(self):
         url = f"https://moodle.uni-heidelberg.de/course/view.php?id={self.course_id}"
         res = self.request_ensure_login(url)
+        if res.status_code == 503:
+            return []
         doc = BeautifulSoup(res.text, "html.parser")
         links = []
         for a in doc.find_all("a", attrs={"class": "aalink"}):

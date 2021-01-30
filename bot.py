@@ -159,8 +159,14 @@ async def background_task():
                 updates = feed.get_updates()
             except:
                 if feed.name in last_error:
-                    if time.time() < last_error[feed.name] + config["error_timeout"]:
+                    delta_t = time.time() - last_error[feed.name]
+                    if delta_t < config["error_timeout"]:
                         continue
+                    elif delta_t > config["error_timeout"] * 4:
+                        last_error["feed_name"] = time.time()
+                        continue
+                else:
+                    continue
                 last_error[feed.name] = time.time()
                 traceback.print_exc()
                 feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**")

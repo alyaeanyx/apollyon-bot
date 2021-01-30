@@ -4,6 +4,7 @@ import yaml
 import feeds
 import traceback
 import time
+import datetime
 
 config = yaml.safe_load(open("config.yaml"))
 p = config["command_prefix"]
@@ -175,6 +176,9 @@ async def background_task():
                         await channel.send(update)
                     await asyncio.sleep(0.5)
 
+        timestamp = datetime.datetime.now().isoformat(timespec="seconds")
+        activity = discord.Activity(type=discord.ActivityType.playing, name="Last update: "+timestamp)
+        await client.change_presence(activity=activity)
         await asyncio.sleep(config["fetching_interval"])
 
 

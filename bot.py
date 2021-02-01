@@ -28,6 +28,12 @@ async def on_ready():
 
 
 @client.event
+async def on_member_update(before, after):
+    if after.id == client.user.id and after.nick != config["nickname"]:
+        await after.edit(nick=config["nickname"])
+
+
+@client.event
 async def on_message(message):
     if message.content.startswith(p) and message.author != client.user:
         channels_updated = False

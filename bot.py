@@ -185,6 +185,11 @@ async def background_task():
         timestamp = datetime.datetime.now().isoformat(timespec="seconds")
         activity = discord.Activity(type=discord.ActivityType.playing, name="Last update: "+timestamp)
         await client.change_presence(activity=activity)
+
+        for guild in client.guilds:
+            if guild.me.nick != config["nickname"]:
+                await guild.me.edit(nick=config["nickname"])
+
         await asyncio.sleep(config["fetching_interval"])
 
 

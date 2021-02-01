@@ -2,6 +2,8 @@ command_prefix: "-"
 maintainer: MAINTAINER_DISCORD_USER_ID
 discord_token: TOKEN
 nickname: Apollyon
+blocklist:
+  - 765108749571850251
 
 fetching_interval: 30
 error_timeout: 600

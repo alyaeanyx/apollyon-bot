@@ -18,6 +18,7 @@ client = discord.Client()
 
 ready = False
 
+
 @client.event
 async def on_ready():
     global ready
@@ -179,6 +180,9 @@ async def background_task():
 
             for ch in f["channels"]:
                 channel = client.get_channel(ch["id"])
+                if channel.guild.id in config["blocklist"]:
+                    continue
+
                 mentioned = False
                 for update in updates:
                     if ch["mention"] != "" and not mentioned:

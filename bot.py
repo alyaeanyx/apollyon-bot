@@ -41,7 +41,8 @@ async def on_message(message):
         command = message.content[len(p):].split(" ")
 
         if not message.author.permissions_in(message.channel).manage_channels and command[0] != "help":
-            await message.channel.send("You need to have the \"Manage channels\" permission to use this bot.")
+            if command[0] in ["sync", "syncall", "list", "add", "remove", "mention", "clear"]:
+                await message.channel.send("You need to have the \"Manage channels\" permission to use this bot.")
             return
 
         if command[0] == "help":

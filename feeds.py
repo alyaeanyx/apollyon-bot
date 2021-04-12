@@ -5,6 +5,7 @@ import feedlib.rocketchat_lib
 import feedlib.mampf
 import feedlib.ph_uebungsgruppen
 import feedlib.moodle
+import feedlib.json_feed
 
 
 def get_feed(name):
@@ -72,6 +73,12 @@ FEEDS = [
         "LA2_worksheets", "Übungsblätter für Lineare Algebra 2 (MaMpf)",
         "Auf MaMpf wurde soeben eine neue Datei für LA hochgeladen: **{title}**\nLink: {url}",
         86, "nuesse"
+    ),
+    
+    feedlib.json_feed.JSONFeed(
+    "HöMa2_files", "Dateien für HöMa2", "https://uni.ericbiedert.de/homa",
+    """Neue Datei für HöMa: **{name}**
+    {link}"""
     ),
 
     feedlib.DeveloperFeed("DevLog", "Developer message log")

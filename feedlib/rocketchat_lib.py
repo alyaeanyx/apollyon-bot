@@ -17,16 +17,26 @@ class RocketchatYoutubeFeed(Feed):
         self.rocketchat_url = rocketchat_url
         self.rocketchat_room = rocketchat_room
         self.youtube_channel = youtube_channel
-
-    def check_for_links(self):
+        self.api = self.login()
+    
+    def login(self):
         api = RocketChatAPI(settings={
             "username": config["rocketchat_user"], "password": config["rocketchat_password"],
             "domain": self.rocketchat_url
         })
+        return api
 
+    def check_for_links(self):
         links = []
         oldest = (datetime.datetime.now()-datetime.timedelta(seconds=86400*10)).isoformat()
-        res = api.get_private_room_history(self.rocketchat_room, oldest=oldest)
+        
+        while True:
+            try:
+                res = self.api.get_private_room_history(self.rocketchat_room, oldest=oldest)
+                break
+            except requests.exceptions.HTTPError:
+                self.api = self.login()
+        
         for msg in res["messages"][::-1]:
             match = re.search("https:\/\/(www\.)?youtu(be\.(com|de)|\.be)\/(watch\?v\=)?([0-9A-Za-z\-_]+)", msg["msg"])
             if match:
@@ -43,9 +53,6 @@ class RocketchatYoutubeFeed(Feed):
         updates = []
         for link in self.check_for_links():
             if not self.already_sent(link):
-                updates.append(self.text.format(link="https://youtu.be/"+link))
+                updates.append(self.text.format(video_id=link))
                 self.register_as_sent(link)
         return updates
-
-
-

@@ -8,5 +8,4 @@ Dependencies:
 - requests
 - bs4
 - rocket-python
-
-
+- python-dateutil

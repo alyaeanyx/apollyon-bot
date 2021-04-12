@@ -32,7 +32,7 @@ class ScheduledFeed(Feed):
         now = datetime.datetime.now()
         for item in self.schedule:
             if now >= item.time and not self.already_sent(item):
-                updates.append(self.text % (item.number, item.text))
+                updates.append(self.text.format(n=item.number, video_id=item.text))
                 self.register_as_sent(item)
         return updates
 

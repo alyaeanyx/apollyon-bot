@@ -143,7 +143,8 @@ async def on_message(message):
             await message.channel.send(f"Cleared channel #{message.channel.name}.")
 
         else:
-            await message.channel.send(f"Unknown command. Try {p}help for a full list of commands.")
+            #await message.channel.send(f"Unknown command. Try {p}help for a full list of commands.")
+            pass
 
         if channels_updated:
             chfile = open("channels.yaml", "w")

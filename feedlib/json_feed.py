@@ -27,6 +27,6 @@ class JSONFeed(Feed):
         updates = []
         for name, link in self.fetch_worksheets():
             if not self.already_sent(link):
-                updates.append(self.text.format(name=name, link="https://uebungen.physik.uni-heidelberg.de"+link))
+                updates.append(self.text.format(name=name, link=link))
                 self.register_as_sent(link)
         return updates

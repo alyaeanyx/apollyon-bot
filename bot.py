@@ -178,8 +178,8 @@ async def background_task():
                 else:
                     continue"""
                 last_error[feed.name] = time.time()
-                traceback.print_exc()
-                feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**")
+                exc = ''.join(traceback.format_exception(None, e, e.__traceback__))
+                feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**:\n{exc}")
 
             for ch in f["channels"]:
                 channel = client.get_channel(ch["id"])

@@ -47,6 +47,7 @@ class RocketchatYoutubeFeed(Feed):
                 data = json.loads(res.text)
                 if data["items"][0]["snippet"]["channelId"] == self.youtube_channel:
                     links.append(match[5])
+        print(links)
         return links
 
     def get_updates(self):

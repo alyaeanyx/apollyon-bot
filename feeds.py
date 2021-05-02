@@ -6,6 +6,7 @@ import feedlib.mampf
 import feedlib.ph_uebungsgruppen
 import feedlib.moodle
 import feedlib.json_feed
+import feedlib.youtube_playlist_feed
 
 
 def get_feed(name):
@@ -30,13 +31,12 @@ FEEDS = [
         https://youtube.com/watch?v={video_id}"""
     ),
 
-    feedlib.rocketchat_lib.RocketchatYoutubeFeed(
-        "PEP2_lectures", "Vorlesungen Experimentalphysik 2 (Links aus RocketChat)",
+    feedlib.youtube_playlist_feed.YoutubePlaylistFeed(
+        "PEP2_lectures", "Vorlesungen Experimentalphysik 2 (Links aus Youtube-Playlist)",
         """Neue Vorlesung:
         https://invidious.xyz/watch?v={video_id}
         https://youtube.com/watch?v={video_id}""",
-        "https://uebungen.physik.uni-heidelberg.de/chat", "YdwY2wNALqNBG9sLM",
-        "UCW5F1NI96JIaLbYT6f7BpdQ"
+        "PLV4myXOeqesg5jNQGspbysR03C0-sT6jB"
     ),
 
     feedlib.mampf.MampfFeed(

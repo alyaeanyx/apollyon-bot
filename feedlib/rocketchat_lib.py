@@ -41,6 +41,7 @@ class RocketchatYoutubeFeed(Feed):
             match = re.search("https:\/\/(www\.)?youtu(be\.(com|de)|\.be)\/(watch\?v\=)?([0-9A-Za-z\-_]+)", msg["msg"])
             if match:
                 yt_id = match[5]
+                yt_id = match[5]
                 res = requests.get("https://youtube.googleapis.com/youtube/v3/videos",
                                    {"key": config["youtube_api_key"], "part": "snippet",
                                     "id": yt_id})

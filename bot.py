@@ -167,7 +167,7 @@ async def background_task():
             feed = feeds.get_feed(f["feed_name"])
             try:
                 updates = feed.get_updates()
-            except:
+            except Exception as e:
                 """if feed.name in last_error:
                     delta_t = time.time() - last_error[feed.name]
                     if delta_t < config["error_timeout"]:

@@ -162,51 +162,51 @@ async def background_task():
     await asyncio.sleep(2)
 
     while True:
-        for f in feed_channels:
-            print("Syncing feed", f["feed_name"])
-            feed = feeds.get_feed(f["feed_name"])
-            try:
-                updates = feed.get_updates()
-            except Exception as e:
-                """if feed.name in last_error:
-                    delta_t = time.time() - last_error[feed.name]
-                    if delta_t < config["error_timeout"]:
-                        continue
-                    elif delta_t > config["error_timeout"] * 4:
-                        last_error["feed_name"] = time.time()
-                        continue
-                else:
-                    continue"""
-                last_error[feed.name] = time.time()
-                exc = ''.join(traceback.format_exception(None, e, e.__traceback__))
-                feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**:\n{exc}")
-
-            for ch in f["channels"]:
-                channel = client.get_channel(ch["id"])
-                if channel.guild.id in config["blocklist"]:
-                    continue
-
-                mentioned = False
-                for update in updates:
-                    if ch["mention"] != "" and not mentioned:
-                        await channel.send(ch["mention"] + " " + update)
-                        mentioned = True
-                    else:
-                        await channel.send(update)
-                    await asyncio.sleep(0.5)
-
-        timestamp = datetime.datetime.now().isoformat(timespec="seconds")
-        activity = discord.Activity(type=discord.ActivityType.playing, name="Last update: "+timestamp)
         try:
+            for f in feed_channels:
+                print("Syncing feed", f["feed_name"])
+                feed = feeds.get_feed(f["feed_name"])
+                try:
+                    updates = feed.get_updates()
+                except Exception as e:
+                    """if feed.name in last_error:
+                        delta_t = time.time() - last_error[feed.name]
+                        if delta_t < config["error_timeout"]:
+                            continue
+                        elif delta_t > config["error_timeout"] * 4:
+                            last_error["feed_name"] = time.time()
+                            continue
+                    else:
+                        continue"""
+                    last_error[feed.name] = time.time()
+                    exc = ''.join(traceback.format_exception(None, e, e.__traceback__))
+                    feeds.get_feed("DevLog").add_update(f"An error occurred in the update routine of **{feed.name}**:\n{exc}")
+
+                for ch in f["channels"]:
+                    channel = client.get_channel(ch["id"])
+                    if channel.guild.id in config["blocklist"]:
+                        continue
+
+                    mentioned = False
+                    for update in updates:
+                        if ch["mention"] != "" and not mentioned:
+                            await channel.send(ch["mention"] + " " + update)
+                            mentioned = True
+                        else:
+                            await channel.send(update)
+                        await asyncio.sleep(0.5)
+
+            timestamp = datetime.datetime.now().isoformat(timespec="seconds")
+            activity = discord.Activity(type=discord.ActivityType.playing, name="Last update: "+timestamp)
             await client.change_presence(activity=activity)
-        except ConnectionResetError:
-            pass
 
-        for guild in client.guilds:
-            if guild.me.nick != config["nickname"]:
-                await guild.me.edit(nick=config["nickname"])
+            for guild in client.guilds:
+                if guild.me.nick != config["nickname"]:
+                    await guild.me.edit(nick=config["nickname"])
 
-        await asyncio.sleep(config["fetching_interval"])
+            await asyncio.sleep(config["fetching_interval"])
+        except:
+            print("Error in main routine")
 
 
 client.loop.create_task(background_task())
